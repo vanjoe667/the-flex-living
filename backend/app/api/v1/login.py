@@ -39,6 +39,10 @@ async def login(request: LoginRequest):
         
         logger.info(f"[LOGIN] Attempting login for: {email}")
         
+        current_time = datetime.utcnow()
+        issued_at = int(current_time.timestamp())
+        expires_at = int((current_time + timedelta(hours=24)).timestamp())
+        
         # Static credentials - Tenant A.
         if email == "sunset@propertyflow.com" and password == "client_a_2024":
             logger.info("[LOGIN] Challenge Mode: Tenant A (Sunset Properties)")
@@ -51,7 +55,9 @@ async def login(request: LoginRequest):
                 "user_metadata": {"name": "Sunset Properties Manager"},
                 "aud": "authenticated",
                 "created_at": datetime.utcnow().isoformat(),
-                "exp": datetime.utcnow() + timedelta(hours=24)
+                "iat": issued_at,  
+                "exp": expires_at,     
+                "nbf": issued_at,
             }
             
             token = jwt.encode(user_data, settings.secret_key, algorithm="HS256")
@@ -81,7 +87,9 @@ async def login(request: LoginRequest):
                 "user_metadata": {"name": "Ocean Rentals Manager"},
                 "aud": "authenticated",
                 "created_at": datetime.utcnow().isoformat(),
-                "exp": datetime.utcnow() + timedelta(hours=24)
+                "iat": issued_at,  
+                "exp": expires_at,     
+                "nbf": issued_at,
             }
             
             token = jwt.encode(user_data, settings.secret_key, algorithm="HS256")
