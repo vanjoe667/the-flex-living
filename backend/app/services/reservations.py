@@ -44,7 +44,7 @@ async def calculate_total_revenue(property_id: str, tenant_id: str) -> Dict[str,
         await db_pool.initialize()
         
         if db_pool.session_factory:
-            async with db_pool.get_session() as session:
+            async with db_pool.get_session() as session: # type: ignore
                 # Use SQLAlchemy text for raw SQL
                 from sqlalchemy import text
                 

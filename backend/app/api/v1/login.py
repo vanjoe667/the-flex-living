@@ -111,14 +111,19 @@ async def login(request: LoginRequest):
         # This is a simplified auth - in production you'd check password hashes
         try:
             # Check if user exists in Supabase auth
-            user_result = supabase.auth.admin.list_users()
-            users = user_result if hasattr(user_result, '__iter__') else []
+            # user_result = supabase.auth.admin.list_users()
+            # users = user_result if hasattr(user_result, '__iter__') else []
             
-            user = None
-            for u in users:
-                if u.email and u.email.lower() == email:
-                    user = u
-                    break
+            # user = None
+            # for u in users:
+            #     if u.email and u.email.lower() == email:
+            #         user = u
+            #         break
+            auth_response = supabase.auth.sign_in_with_password({
+                "email": email,
+                "password": password
+            })
+            user = auth_response.user
                     
             if not user:
                 logger.warning(f"[LOGIN] User not found: {email}")
