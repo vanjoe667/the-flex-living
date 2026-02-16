@@ -158,6 +158,17 @@ async def get_user_departments_endpoint(
     user_id: str,
     user: AuthenticatedUser = Depends(authenticate_request)
 ):
+    # Only allow users to access their own data or admins to access any
+    if not user.is_admin and user.id != user_id:
+        logger.warning(
+            f"Authorization violation: User {user.id} attempted to access "
+            f"departments for user {user_id}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only access your own departments"
+        )
+        
     """Get departments for a specific user"""
     try:
         departments = await get_user_departments(user_id)
