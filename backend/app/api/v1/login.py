@@ -6,7 +6,7 @@ from ...core.tenant_resolver import TenantResolver
 from ...models.auth import Permission
 import logging
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import jwt
 from ...config import settings
 
@@ -39,9 +39,8 @@ async def login(request: LoginRequest):
         
         logger.info(f"[LOGIN] Attempting login for: {email}")
         
-        current_time = datetime.utcnow()
-        issued_at = int(current_time.timestamp())
-        expires_at = int((current_time + timedelta(hours=24)).timestamp())
+        issued_at = int(datetime.now(timezone.utc).timestamp())
+        expires_at = datetime.now(timezone.utc) + timedelta(hours=24)
         
         # Static credentials - Tenant A.
         if email == "sunset@propertyflow.com" and password == "client_a_2024":
