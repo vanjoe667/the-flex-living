@@ -119,6 +119,7 @@ async def login(request: LoginRequest):
             #     if u.email and u.email.lower() == email:
             #         user = u
             #         break
+            
             auth_response = supabase.auth.sign_in_with_password({
                 "email": email,
                 "password": password
