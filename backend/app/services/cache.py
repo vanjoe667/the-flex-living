@@ -10,6 +10,7 @@ async def get_revenue_summary(property_id: str, tenant_id: str) -> Dict[str, Any
     """
     Fetches revenue summary, utilizing caching to improve performance.
     """
+    print(f"property_id: {property_id} and tenant_id: {tenant_id}")
     cache_key = f"revenue:{property_id}"
     
     # Try to get from cache

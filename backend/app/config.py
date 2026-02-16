@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     n8n_verification_webhook_url: Optional[str] = None
     openai_api_key: Optional[str] = None
     
+    supabase_db_user: str = "postgres"
+    supabase_db_password: str = "postgres"
+    supabase_db_host: str = "db"
+    supabase_db_port: str = "5432"
+    supabase_db_name: str = "propertyflow"
+    
     # ... allow extra fields just in case
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
     
